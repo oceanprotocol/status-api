@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import express from 'express'
-import { networkStatus, getStatus } from './db'
+import { networkStatus, getStatus, insert } from './db'
 import { Status } from './@types'
 
 const router = express.Router()
@@ -16,6 +16,13 @@ router.get('/', async function (req: Request, res: Response) {
 router.get('/network/:network', async function (req: Request, res: Response) {
   await networkStatus(req.params.network, (row: Status) => {
     res.send(row)
+  })
+})
+
+/* GET: current status of Ocean components on a given network. */
+router.post('/update', async function (req: Request, res: Response) {
+  await insert(req.body, () => {
+    res.send('Database updated')
   })
 })
 

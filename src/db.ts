@@ -187,7 +187,7 @@ export async function getStatus(callback: (row: Status[]) => void) {
   }
 }
 
-export function insert(status: Status) {
+export function insert(status: Status, callback: () => void) {
   try {
     db.run(
       `INSERT INTO statusHistory(
@@ -269,8 +269,9 @@ export function insert(status: Status) {
       function (err) {
         if (err) {
           return console.log(err.message)
+        } else {
+          callback
         }
-        // get the last insert id
       }
     )
   } catch (err) {
