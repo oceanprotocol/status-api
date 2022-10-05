@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 import indexRouter from './routes'
-import { connection } from './controllers/db'
+import { connection } from './db'
 
 const app = express()
 const port = process.env.PORT
