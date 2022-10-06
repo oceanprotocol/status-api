@@ -191,7 +191,6 @@ export async function insert(
   status: Status,
   callback: (response: string) => void
 ) {
-  console.log('status', status)
   try {
     db.run(
       `INSERT INTO statusHistory(
@@ -279,6 +278,6 @@ export async function insert(
       }
     )
   } catch (err) {
-    console.error('!ERROR: ', err)
+    console.error('ERROR: ', err)
   }
 }
