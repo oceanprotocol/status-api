@@ -21,7 +21,8 @@ router.get('/network/:network', async function (req: Request, res: Response) {
 
 /* GET: current status of Ocean components on a given network. */
 router.post('/update', async function (req: Request, res: Response) {
-  await insert(req.body, (response: string) => {
+  await insert(req.body.status, (response: string) => {
+    console.log('response', response)
     res.send(response)
   })
 })
