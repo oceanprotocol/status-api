@@ -64,11 +64,6 @@ export interface FaucetStatus {
 
 export interface Network {
   name: string
-  chainId: string
-  test?: boolean
-  faucetWallet?: string
-  rpcUrl?: string
-  oceanAddress?: string
 }
 
 export interface dbRow {
