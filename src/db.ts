@@ -174,12 +174,10 @@ export async function networkStatus(
 }
 
 export async function getStatus(callback: (row: Status[]) => void) {
-  console.log('GET status')
   const networks: Network[] = JSON.parse(process.env.NETWORKS)
   const status: Status[] = []
   for (let i = 0; i < networks.length; i++) {
     const network: string = networks[i].name
-    console.log(i, network)
     await networkStatus(network, (data: Status) => {
       status.push(data)
       if (i === networks.length - 1) {
@@ -189,7 +187,10 @@ export async function getStatus(callback: (row: Status[]) => void) {
   }
 }
 
-export async function insert(status: Status, callback: () => void) {
+export async function insert(
+  status: Status,
+  callback: (response: string) => void
+) {
   console.log('status', status)
   try {
     db.run(
@@ -270,13 +271,10 @@ export async function insert(status: Status, callback: () => void) {
         status.lastUpdatedOn
       ],
       function (err) {
-        console.log('DONE')
         if (err) {
-          console.log('ERROR')
-          return console.log(err.message)
+          callback(`ERROR: ${err.message}`)
         } else {
-          console.log('callback')
-          callback
+          callback('Database updated')
         }
       }
     )

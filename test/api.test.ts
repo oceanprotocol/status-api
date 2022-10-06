@@ -7,47 +7,47 @@ describe('Price Request Tests', function () {
   this.timeout(300000)
   const recentBlock = 10000000
 
-  const exampleStatus = {
-    network: 'mainnet',
-    currentBlock: 15688395,
-    market: 'UP',
-    port: 'UP',
-    dataFarming: 'UP',
-    daoGrants: 'UP',
-    faucet: {},
-    provider: {
-      response: 200,
-      version: '1.0.20',
-      latestRelease: '1.3.4',
-      status: 'WARNING'
-    },
-    subgraph: {
-      block: 15688395,
-      version: '2.1.3',
-      latestRelease: '2.1.3',
-      response: 200,
-      status: 'UP'
-    },
-    aquarius: {
-      response: 200,
-      version: '4.4.2',
-      latestRelease: '4.5.1',
-      validChainList: true,
-      block: 15688390,
-      monitorVersion: '4.5.1',
-      validQuery: true,
-      status: 'WARNING'
-    },
-    operator: {
-      limitReached: false,
-      response: 200,
-      version: '1.0.1',
-      latestRelease: '1.0.1',
-      environments: 2,
-      status: 'UP'
-    },
-    lastUpdatedOn: Date.now()
-  }
+  //   const exampleStatus = {
+  //     "network": "mainnet",
+  //     "currentBlock": 15688395,
+  //     "market": "UP",
+  //     "port": "UP",
+  //     "dataFarming": "UP",
+  //     "daoGrants": "UP",
+  //     "faucet": {},
+  //     "provider": {
+  //         "response": 200,
+  //         "version": "1.0.20",
+  //         "latestRelease": "1.3.4",
+  //         "status": "WARNING"
+  //     },
+  //     "subgraph": {
+  //         "block": 15688395,
+  //         "version": "2.1.3",
+  //         "latestRelease": "2.1.3",
+  //         "response": 200,
+  //         "status": "UP"
+  //     },
+  //     "aquarius": {
+  //         "response": 200,
+  //         "version": "4.4.2",
+  //         "latestRelease": "4.5.1",
+  //         "validChainList": true,
+  //         "block": 15688390,
+  //         "monitorVersion": "4.5.1",
+  //         "validQuery": true,
+  //         "status": "WARNING"
+  //     },
+  //     "operator": {
+  //         "limitReached": false,
+  //         "response": 200,
+  //         "version": "1.0.1",
+  //         "latestRelease": "1.0.1",
+  //         "environments": 2,
+  //         "status": "UP"
+  //     },
+  //     "lastUpdatedOn": 1665051262570
+  // }
 
   it('Gets the current status of Ocean services on Mainnet', async () => {
     const response = await request(app)
