@@ -19,7 +19,7 @@ router.get('/network/:network', async function (req: Request, res: Response) {
   })
 })
 
-/* GET: current status of Ocean components on a given network. */
+/* GET: update status of Ocean components in DB. */
 router.post('/update', async function (req: Request, res: Response) {
   await insert(req.body.status, (response: string) => {
     console.log('response', response)
