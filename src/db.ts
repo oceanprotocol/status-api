@@ -180,7 +180,7 @@ export async function getStatus(callback: (row: Status[]) => void) {
     const network: string = networks[i].name
     await networkStatus(network, (data: Status) => {
       status.push(data)
-      if (i === networks.length - 1) {
+      if (status.length === networks.length) {
         callback(status)
       }
     })

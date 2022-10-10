@@ -13,19 +13,19 @@ API for requesting the status of Ocean components
 ### Get the current status of Ocean components on all networks.
 
 ```
-GET: http://localhost:8080/
+GET: http://localhost:8000/
 ```
 
 ### Get the current status of Ocean components on a given network.
 
 ```
-GET: http://localhost:8080/network/mainnet
+GET: http://localhost:8000/network/mainnet
 ```
 
 ### Update status of Ocean components in DB.
 
 ```
-POST: http://localhost:8080/update
+POST: http://localhost:8000/update
 ```
 
 ## Testing

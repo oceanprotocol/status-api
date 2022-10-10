@@ -7,8 +7,8 @@ const router = express.Router()
 
 /* GET: current status of Ocean components on all networks. */
 router.get('/', async function (req: Request, res: Response) {
-  await getStatus((rows: Status[]) => {
-    res.send(rows)
+  await getStatus((data: Status[]) => {
+    res.send(data)
   })
 })
 
@@ -19,7 +19,7 @@ router.get('/network/:network', async function (req: Request, res: Response) {
   })
 })
 
-/* GET: update status of Ocean components in DB. */
+/* POST: update status of Ocean components in DB. */
 router.post('/update', async function (req: Request, res: Response) {
   await insert(req.body.status, (response: string) => {
     console.log('response', response)
