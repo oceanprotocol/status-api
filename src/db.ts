@@ -173,11 +173,11 @@ export async function networkStatus(
 export async function getStatus(callback: (row: Status[]) => void) {
   const networkList = process.env.NETWORKS
     ? process.env.NETWORKS
-    : '[{"name":"mainnet"},{"name":"polygon"},{"name":"bsc"},{"name":"moonriver"},{"name":"energyweb"},{"name":"mumbai"},{"name":"moonbase"},{"name":"goerli"}]'
-  const networks: Network[] = JSON.parse(networkList)
+    : '["mainnet","polygon","bsc","moonriver","energyweb","mumbai","moonbase","goerli"]'
+  const networks: string[] = JSON.parse(networkList)
   const status: Status[] = []
   for (let i = 0; i < networks.length; i++) {
-    const network: string = networks[i].name
+    const network: string = networks[i]
     await networkStatus(network, (data: Status) => {
       status.push(data)
       if (status.length === networks.length) {

@@ -62,10 +62,6 @@ export interface FaucetStatus {
   oceanBalanceSufficient?: boolean
 }
 
-export interface Network {
-  name: string
-}
-
 export interface dbRow {
   network: string
   currentBlock: number
