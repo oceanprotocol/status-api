@@ -145,6 +145,17 @@ describe('Price Request Tests', function () {
     assert(response.text === 'Database updated', 'Update failed')
   })
 
+  it('Gets the current status of Ocean services for all networks', async () => {
+    const response = await request(app)
+      .get(`/`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+
+    const data: Status[] = response.body
+
+    assert(data.length === 8, `Invalid number of networks returned`)
+  })
+
   const networkList = JSON.parse(
     process.env.NETWORKS
       ? process.env.NETWORKS
