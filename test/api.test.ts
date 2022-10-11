@@ -1,80 +1,145 @@
 import request from 'supertest'
 import { assert } from 'chai'
 import app from '../src/app'
-import { Status } from '../src/@types'
+import { Status, FaucetStatus, State } from '../src/@types'
+import { BigNumber } from 'ethers'
 
 describe('Price Request Tests', function () {
   this.timeout(300000)
   const recentBlock = 10000000
 
-  const exampleStatus = (network: string) => {
-    return {
-      status: {
-        network: network,
-        currentBlock: 15688395,
-        market: 'UP',
-        port: 'UP',
-        dataFarming: 'UP',
-        daoGrants: 'UP',
-        faucet: {},
-        provider: {
-          response: 200,
-          version: '1.0.20',
-          latestRelease: '1.3.4',
-          status: 'UP'
-        },
-        subgraph: {
-          block: 15688395,
-          version: '2.1.3',
-          latestRelease: '2.1.3',
-          response: 200,
-          status: 'UP'
-        },
-        aquarius: {
-          response: 200,
-          version: '4.4.2',
-          latestRelease: '4.5.1',
-          validChainList: true,
-          block: 15688390,
-          monitorVersion: '4.5.1',
-          validQuery: true,
-          status: 'UP'
-        },
-        operator: {
-          limitReached: false,
-          response: 200,
-          version: '1.0.1',
-          latestRelease: '1.0.1',
-          environments: 2,
-          status: 'UP'
-        },
-        lastUpdatedOn: 1665051262570
-      }
+  const exampleStatus = (
+    network: string,
+    faucet: FaucetStatus | Record<string, never>
+  ): Status => {
+    const status: Status = {
+      network: network,
+      currentBlock: 15688395,
+      market: State.Up,
+      port: State.Up,
+      dataFarming: State.Up,
+      daoGrants: State.Up,
+      faucet,
+      provider: {
+        response: 200,
+        version: '1.0.20',
+        latestRelease: '1.3.4',
+        status: State.Up
+      },
+      subgraph: {
+        block: 15688395,
+        version: '2.1.3',
+        latestRelease: '2.1.3',
+        response: 200,
+        status: State.Up
+      },
+      aquarius: {
+        response: 200,
+        version: '4.4.2',
+        latestRelease: '4.5.1',
+        validChainList: true,
+        block: 15688390,
+        monitorVersion: '4.5.1',
+        validQuery: true,
+        status: State.Up
+      },
+      operator: {
+        limitReached: false,
+        response: 200,
+        version: '1.0.1',
+        latestRelease: '1.0.1',
+        environments: 2,
+        status: State.Up
+      },
+      lastUpdatedOn: 1665051262570
     }
+    return status
+  }
+
+  const faucetStatus: FaucetStatus = {
+    status: State.Up,
+    response: 200,
+    ethBalance: BigNumber.from('10000'),
+    ethBalanceSufficient: true,
+    oceanBalance: BigNumber.from('10000'),
+    oceanBalanceSufficient: true
   }
 
   it('Updates the status in the DB from mainnet', async () => {
+    const status = exampleStatus('mainnet', {})
     const response = await request(app)
       .post('/update')
-      .send(exampleStatus('mainnet'))
+      .send({ status })
       .expect(200)
 
     assert(response.text === 'Database updated', 'Update failed')
   })
 
   it('Updates the status in the DB form polygon', async () => {
+    const status = exampleStatus('polygon', {})
     const response = await request(app)
       .post('/update')
-      .send(exampleStatus('polygon'))
+      .send({ status })
       .expect(200)
 
     assert(response.text === 'Database updated', 'Update failed')
   })
 
   it('Updates the status in the DB form BSC', async () => {
+    const status = exampleStatus('bsc', {})
     const response = await request(app)
       .post('/update')
-      .send(exampleStatus('bsc'))
+      .send({ status })
+      .expect(200)
+
+    assert(response.text === 'Database updated', 'Update failed')
+  })
+
+  it('Updates the status in the DB form moonriver', async () => {
+    const status = exampleStatus('moonriver', {})
+    const response = await request(app)
+      .post('/update')
+      .send({ status })
+      .expect(200)
+
+    assert(response.text === 'Database updated', 'moonriver Update failed')
+  })
+
+  it('Updates the status in the DB form energyweb', async () => {
+    const status = exampleStatus('energyweb', {})
+    const response = await request(app)
+      .post('/update')
+      .send({ status })
+      .expect(200)
+
+    assert(response.text === 'Database updated', 'Update failed')
+  })
+
+  it('Updates the status in the DB form goerli', async () => {
+    const status = exampleStatus('goerli', faucetStatus)
+    const response = await request(app)
+      .post('/update')
+      .send({ status })
+      .expect(200)
+
+    assert(response.text === 'Database updated', 'Update failed')
+  })
+
+  it('Updates the status in the DB form mumbai', async () => {
+    const status = exampleStatus('mumbai', faucetStatus)
+    const response = await request(app)
+      .post('/update')
+      .send({ status })
+      .expect(200)
+
+    assert(response.text === 'Database updated', 'Update failed')
+  })
+
+  it('Updates the status in the DB form moonbase', async () => {
+    const status = exampleStatus('moonbase', faucetStatus)
+    const response = await request(app)
+      .post('/update')
+      .send({ status })
       .expect(200)
 
     assert(response.text === 'Database updated', 'Update failed')
