@@ -6,15 +6,13 @@ let db
 
 export async function connection() {
   try {
-    db = new sqlite3.Database(
-      process.env.DB_PATH,
-      sqlite3.OPEN_READWRITE,
-      (err) => {
-        if (err) {
-          return console.log('Could not connect to database', err)
-        } else {
-          db.run(
-            `CREATE TABLE IF NOT EXISTS statusHistory(
+    const dbPath = process.env.DB_PATH ? process.env.DB_PATH : 'db.sqlite3'
+    db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+      if (err) {
+        return console.log('Could not connect to database', err)
+      } else {
+        db.run(
+          `CREATE TABLE IF NOT EXISTS statusHistory(
               network text,
               currentBlock integer,
               aquariusStatus text,
@@ -52,11 +50,10 @@ export async function connection() {
               faucetOceanBalanceSufficient text,
               lastUpdatedOn integer
               )`
-          ),
-            console.log('Connected to database')
-        }
+        ),
+          console.log('Connected to database')
       }
-    )
+    })
   } catch (err) {
     console.error(err)
   }
@@ -174,7 +171,10 @@ export async function networkStatus(
 }
 
 export async function getStatus(callback: (row: Status[]) => void) {
-  const networks: Network[] = JSON.parse(process.env.NETWORKS)
+  const networkList = process.env.NETWORKS
+    ? process.env.NETWORKS
+    : '[{"name":"mainnet"},{"name":"polygon"},{"name":"bsc"},{"name":"moonriver"},{"name":"energyweb"},{"name":"mumbai"},{"name":"moonbase"},{"name":"goerli"}]'
+  const networks: Network[] = JSON.parse(networkList)
   const status: Status[] = []
   for (let i = 0; i < networks.length; i++) {
     const network: string = networks[i].name

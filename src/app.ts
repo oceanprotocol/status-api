@@ -5,7 +5,7 @@ import indexRouter from './routes'
 import { connection } from './db'
 
 const app = express()
-const port = process.env.PORT
+const port = process.env.PORT ? process.env.PORT : 8000
 
 app.use(express.json())
 app.use(cors())
