@@ -4,7 +4,7 @@ import app from '../src/app'
 import { Status, FaucetStatus, State } from '../src/@types'
 import { BigNumber } from 'ethers'
 
-describe('Price Request Tests', function () {
+describe('API Request Tests', function () {
   this.timeout(300000)
   const recentBlock = 1000000
 
