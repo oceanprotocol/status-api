@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import sqlite3 from 'sqlite3'
-import { Status, Network, dbRow } from './@types'
+import { Status, dbRow } from './@types'
 
 let db
 
