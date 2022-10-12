@@ -9,7 +9,6 @@ describe('API Request Tests', function () {
   const recentBlock = Math.floor(Math.random() * 1000000)
   const date = Date.now()
   const faucetBalance = '100000000'
-  console.log('recentBlock', recentBlock)
 
   const exampleStatus = (
     network: string,
@@ -67,86 +66,11 @@ describe('API Request Tests', function () {
     oceanBalance: new BigNumber(faucetBalance),
     oceanBalanceSufficient: true
   }
-
-  it('Updates the status in the DB from mainnet', async () => {
-    const status = exampleStatus('mainnet', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form polygon', async () => {
-    const status = exampleStatus('polygon', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form BSC', async () => {
-    const status = exampleStatus('bsc', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form moonriver', async () => {
-    const status = exampleStatus('moonriver', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form energyweb', async () => {
-    const status = exampleStatus('energyweb', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form goerli', async () => {
-    const status = exampleStatus('goerli', faucetStatus)
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form mumbai', async () => {
-    const status = exampleStatus('mumbai', faucetStatus)
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
-
-  it('Updates the status in the DB form moonbase', async () => {
-    const status = exampleStatus('moonbase', faucetStatus)
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'New status inserted in MongoDB', 'Update failed')
-  })
+  const networkList: INetwork[] = JSON.parse(
+    process.env.NETWORKS
+      ? process.env.NETWORKS
+      : '[{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
+  )
 
   // it('Gets the current status of Ocean services for all networks', async () => {
   //   const response = await request(app)
@@ -159,21 +83,29 @@ describe('API Request Tests', function () {
   //   assert(data.length === 8, `Invalid number of networks returned`)
   // })
 
-  const networkList: INetwork[] = JSON.parse(
-    process.env.NETWORKS
-      ? process.env.NETWORKS
-      : '[{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
-  )
-
   networkList.forEach((element: INetwork) => {
     const network = element.name
     const test = element.test
+
+    it(`Updates the status in the DB for ${network}`, async () => {
+      const status = exampleStatus(network, test ? faucetStatus : {})
+      const response = await request(app)
+        .post('/update')
+        .send({ status })
+        .expect(200)
+
+      assert(
+        response.text === 'New status inserted in MongoDB',
+        'Update failed'
+      )
+    })
+
     it(`Gets the current status of Ocean services on ${network}`, async () => {
       const response = await request(app)
         .get(`/network/${network}`)
         .expect('Content-Type', /json/)
         .expect(200)
-      console.log('response.body', response.body)
+
       const data: IStatus = response.body[0]
 
       assert(data.network === `${network}`, `Invalid network for ${network}`)
