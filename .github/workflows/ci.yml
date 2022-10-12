@@ -47,7 +47,8 @@ jobs:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.8.0
         with:
-          mongodb-version: ['4.2', '4.4', '5.0', '6.0']
+          mongodb-version: 4.4
           mongodb-port: 27017
+          mongodb-db: statusHistory
       - run: npm ci
       - run: npm run test
