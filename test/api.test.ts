@@ -1,14 +1,14 @@
 import request from 'supertest'
 import { assert } from 'chai'
 import app from '../src/app'
-import { IStatus, FaucetStatus, State } from '../src/@types'
+import { IStatus, FaucetStatus, State, INetwork } from '../src/@types'
 import { BigNumber } from 'bignumber.js'
 
 describe('API Request Tests', function () {
   this.timeout(300000)
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
   const recentBlock = Math.floor(Math.random() * 1000000)
   const date = Date.now()
+  const faucetBalance = '100000000'
   console.log('recentBlock', recentBlock)
 
   const exampleStatus = (
@@ -62,9 +62,9 @@ describe('API Request Tests', function () {
   const faucetStatus: FaucetStatus = {
     status: State.Up,
     response: 200,
-    ethBalance: new BigNumber('10000'),
+    ethBalance: new BigNumber(faucetBalance),
     ethBalanceSufficient: true,
-    oceanBalance: new BigNumber('10000'),
+    oceanBalance: new BigNumber(faucetBalance),
     oceanBalanceSufficient: true
   }
 
@@ -159,13 +159,15 @@ describe('API Request Tests', function () {
   //   assert(data.length === 8, `Invalid number of networks returned`)
   // })
 
-  const networkList = JSON.parse(
+  const networkList: INetwork[] = JSON.parse(
     process.env.NETWORKS
       ? process.env.NETWORKS
-      : '["mainnet","polygon","bsc","moonriver","energyweb","mumbai","moonbase","goerli"]'
+      : '[{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
   )
 
-  networkList.forEach((network) => {
+  networkList.forEach((element: INetwork) => {
+    const network = element.name
+    const test = element.test
     it(`Gets the current status of Ocean services on ${network}`, async () => {
       const response = await request(app)
         .get(`/network/${network}`)
@@ -255,13 +257,37 @@ describe('API Request Tests', function () {
       )
       assert(data.market === `UP`, `Invalid market for ${network}`)
       assert(data.port === `UP`, `Invalid port for ${network}`)
-      console.log('data.faucet', data.faucet)
-      // assert(data.faucet, `Invalid faucet for ${network}`)
+      if (test) {
+        assert(
+          (data.faucet.status = State.Up),
+          `Invalid faucet status for ${network}`
+        )
+        assert(
+          data.faucet.response === 200,
+          `Invalid faucet response for ${network}`
+        )
+        assert(
+          data.faucet.ethBalance === faucetBalance,
+          `Invalid faucet ethBalance for ${network}`
+        )
+        assert(
+          data.faucet.ethBalanceSufficient === true,
+          `Invalid faucet ethBalanceSufficient for ${network}`
+        )
+        assert(
+          data.faucet.oceanBalance === faucetBalance,
+          `Invalid faucet oceanBalance for ${network}`
+        )
+        assert(
+          data.faucet.oceanBalanceSufficient === true,
+          `Invalid faucet oceanBalanceSufficient for ${network}`
+        )
+      }
+
       assert(
         data.lastUpdatedOn === date,
         `Invalid lastUpdatedOn for ${network}`
       )
     })
   })
-  console.log('recentBlock', recentBlock)
 })

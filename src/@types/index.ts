@@ -55,9 +55,9 @@ export interface OperatorStatus {
 export interface FaucetStatus {
   status?: State
   response?: number
-  ethBalance?: BigNumber
+  ethBalance?: BigNumber | string
   ethBalanceSufficient?: boolean
-  oceanBalance?: BigNumber
+  oceanBalance?: BigNumber | string
   oceanBalanceSufficient?: boolean
 }
 
@@ -98,4 +98,9 @@ export interface dbRow {
   dataFarming: State
   daoGrants: State
   lastUpdatedOn: number
+}
+
+export interface INetwork {
+  name: string
+  test: boolean
 }
