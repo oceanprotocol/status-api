@@ -1,8 +1,8 @@
 import { model, connect } from 'mongoose'
 import { statusSchema } from './schema'
-import { Status } from '../@types'
+import { IStatus } from '../@types'
 
-const Status = model<Status>('User', statusSchema)
+const Status = model<IStatus>('Status', statusSchema)
 
 // Connection URL
 const url = process.env.DB_PATH
@@ -17,14 +17,24 @@ export async function connection() {
     console.log('MongoDB connection error:', error)
   }
 }
-export async function insert(status: Status): Promise<string> {
+
+export async function insert(status: IStatus): Promise<string> {
   try {
     const input = new Status(status)
     await input.save()
-    console.log('New status inserted in MongoDB')
     return 'New status inserted in MongoDB'
   } catch (error) {
-    console.log(`MongoDB insert error: ${error}`)
     return `MongoDB insert error: ${error}`
+  }
+}
+
+export async function getStatus(network: string) {
+  try {
+    const status = await Status.findOne({
+      network
+    })
+    return status
+  } catch (error) {
+    return error
   }
 }
