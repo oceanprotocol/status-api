@@ -2,7 +2,8 @@ import { model, connect } from 'mongoose'
 import { statusSchema } from './schema'
 import { IStatus, INetwork } from '../@types'
 
-const Status = model<IStatus>('Status', statusSchema)
+const collection = process.env.COLLECTION ? process.env.COLLECTION : 'Test'
+const Status = model<IStatus>(collection, statusSchema)
 
 // Connection URL
 const url = process.env.DB_PATH
