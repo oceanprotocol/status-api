@@ -72,17 +72,6 @@ describe('API Request Tests', function () {
       : '[{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
   )
 
-  // it('Gets the current status of Ocean services for all networks', async () => {
-  //   const response = await request(app)
-  //     .get(`/`)
-  //     .expect('Content-Type', /json/)
-  //     .expect(200)
-
-  //   const data: Status[] = response.body
-
-  //   assert(data.length === 8, `Invalid number of networks returned`)
-  // })
-
   networkList.forEach((element: INetwork) => {
     const network = element.name
     const test = element.test
@@ -221,5 +210,16 @@ describe('API Request Tests', function () {
         `Invalid lastUpdatedOn for ${network}`
       )
     })
+  })
+
+  it('Gets the current status of Ocean services for all networks', async () => {
+    const response = await request(app)
+      .get(`/`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+
+    const data: IStatus[] = response.body
+
+    assert(data.length === 8, `Invalid number of networks returned`)
   })
 })
