@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import express from 'express'
-import { networkStatus, getStatus, insert } from './db'
+import { networkStatus, getStatus } from './db'
+import { insert } from './db/mongodb'
 import { Status } from './@types'
 
 const router = express.Router()
@@ -21,10 +22,12 @@ router.get('/network/:network', async function (req: Request, res: Response) {
 
 /* POST: update status of Ocean components in DB. */
 router.post('/update', async function (req: Request, res: Response) {
-  await insert(req.body.status, (response: string) => {
-    console.log('response', response)
-    res.send(response)
-  })
+  const response = await insert(req.body.status)
+  res.send(response)
+  // await insert(req.body.status, (response: string) => {
+  //   console.log('response', response)
+  //   res.send(response)
+  // })
 })
 
 export default router
