@@ -5,7 +5,6 @@ export enum State {
   Down = 'DOWN',
   Warning = 'WARNING'
 }
-
 export interface Status {
   network: string
   currentBlock: number
