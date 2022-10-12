@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { assert } from 'chai'
 import app from '../src/app'
-import { IStatus, FaucetStatus, State, INetwork } from '../src/@types'
+import { IStatus, IFaucetStatus, State, INetwork } from '../src/@types'
 import { BigNumber } from 'bignumber.js'
 
 describe('API Request Tests', function () {
@@ -12,7 +12,7 @@ describe('API Request Tests', function () {
 
   const exampleStatus = (
     network: string,
-    faucet: FaucetStatus | Record<string, never>
+    faucet: IFaucetStatus | Record<string, never>
   ): IStatus => {
     const status: IStatus = {
       network: network,
@@ -58,7 +58,7 @@ describe('API Request Tests', function () {
     return status
   }
 
-  const faucetStatus: FaucetStatus = {
+  const faucetStatus: IFaucetStatus = {
     status: State.Up,
     response: 200,
     ethBalance: new BigNumber(faucetBalance),
