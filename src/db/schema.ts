@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose'
-import { Status, State } from '../@types'
+import { IStatus, State } from '../@types'
 import BigNumberSchema from 'mongoose-bignumber'
 
-export const statusSchema = new Schema<Status>({
+export const statusSchema = new Schema<IStatus>({
   network: { type: String, required: true },
   currentBlock: { type: Number, required: true },
   market: { type: String, enum: State, required: true, default: State.Warning },
@@ -10,9 +10,7 @@ export const statusSchema = new Schema<Status>({
   faucet: {
     status: {
       type: String,
-      enum: State,
-      required: true,
-      default: State.Warning
+      enum: State
     },
     response: Number,
     ethBalance: BigNumberSchema,

@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { assert } from 'chai'
 import app from '../src/app'
-import { Status, FaucetStatus, State } from '../src/@types'
+import { IStatus, FaucetStatus, State } from '../src/@types'
 import { BigNumber } from 'bignumber.js'
 
 describe('API Request Tests', function () {
@@ -11,8 +11,8 @@ describe('API Request Tests', function () {
   const exampleStatus = (
     network: string,
     faucet: FaucetStatus | Record<string, never>
-  ): Status => {
-    const status: Status = {
+  ): IStatus => {
+    const status: IStatus = {
       network: network,
       currentBlock: 15688395,
       market: State.Up,
@@ -51,7 +51,7 @@ describe('API Request Tests', function () {
         environments: 2,
         status: State.Up
       },
-      lastUpdatedOn: 1665051262570
+      lastUpdatedOn: Date.now()
     }
     return status
   }
