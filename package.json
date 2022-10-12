@@ -24,8 +24,7 @@
     "express": "^4.18.1",
     "mongodb": "^4.10.0",
     "mongoose": "^6.6.5",
-    "mongoose-bignumber": "^1.2.0",
-    "sqlite3": "^5.1.1"
+    "mongoose-bignumber": "^1.2.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",
