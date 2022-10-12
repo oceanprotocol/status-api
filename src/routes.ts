@@ -15,7 +15,7 @@ router.get('/', async function (req: Request, res: Response) {
 /* GET: current status of Ocean components on a given network. */
 router.get('/network/:network', async function (req: Request, res: Response) {
   const response = await getStatus(req.params.network)
-  console.log('Get network status response:', response)
+  // console.log('Get network status response:', response)
   res.send(response)
 })
 

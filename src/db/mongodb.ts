@@ -30,9 +30,11 @@ export async function insert(status: IStatus): Promise<string> {
 
 export async function getStatus(network: string) {
   try {
-    const status = await Status.findOne({
+    const status = await Status.find({
       network
     })
+      .sort({ lastUpdatedOn: -1 })
+      .limit(1)
     return status
   } catch (error) {
     return error
