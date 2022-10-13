@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 import indexRouter from './routes'
-import { connection } from './db'
+import { connection } from './db/mongodb'
 
 const app = express()
 const port = process.env.PORT ? process.env.PORT : 8000

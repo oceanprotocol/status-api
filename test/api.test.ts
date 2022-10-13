@@ -1,20 +1,22 @@
 import request from 'supertest'
 import { assert } from 'chai'
 import app from '../src/app'
-import { Status, FaucetStatus, State } from '../src/@types'
-import { BigNumber } from 'ethers'
+import { IStatus, IFaucetStatus, State, INetwork } from '../src/@types'
+import { BigNumber } from 'bignumber.js'
 
 describe('API Request Tests', function () {
   this.timeout(300000)
-  const recentBlock = 1000000
+  const recentBlock = Math.floor(Math.random() * 1000000)
+  const date = Date.now()
+  const faucetBalance = '100000000'
 
   const exampleStatus = (
     network: string,
-    faucet: FaucetStatus | Record<string, never>
-  ): Status => {
-    const status: Status = {
+    faucet: IFaucetStatus | Record<string, never>
+  ): IStatus => {
+    const status: IStatus = {
       network: network,
-      currentBlock: 15688395,
+      currentBlock: recentBlock,
       market: State.Up,
       port: State.Up,
       dataFarming: State.Up,
@@ -27,7 +29,7 @@ describe('API Request Tests', function () {
         status: State.Up
       },
       subgraph: {
-        block: 15688395,
+        block: recentBlock,
         version: '2.1.3',
         latestRelease: '2.1.3',
         response: 200,
@@ -38,7 +40,7 @@ describe('API Request Tests', function () {
         version: '4.4.2',
         latestRelease: '4.5.1',
         validChainList: true,
-        block: 15688390,
+        block: recentBlock,
         monitorVersion: '4.5.1',
         validQuery: true,
         status: State.Up
@@ -51,128 +53,55 @@ describe('API Request Tests', function () {
         environments: 2,
         status: State.Up
       },
-      lastUpdatedOn: 1665051262570
+      lastUpdatedOn: date
     }
     return status
   }
 
-  const faucetStatus: FaucetStatus = {
+  const faucetStatus: IFaucetStatus = {
     status: State.Up,
     response: 200,
-    ethBalance: BigNumber.from('10000'),
+    ethBalance: new BigNumber(faucetBalance),
     ethBalanceSufficient: true,
-    oceanBalance: BigNumber.from('10000'),
+    oceanBalance: new BigNumber(faucetBalance),
     oceanBalanceSufficient: true
   }
-
-  it('Updates the status in the DB from mainnet', async () => {
-    const status = exampleStatus('mainnet', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Updates the status in the DB form polygon', async () => {
-    const status = exampleStatus('polygon', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Updates the status in the DB form BSC', async () => {
-    const status = exampleStatus('bsc', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Updates the status in the DB form moonriver', async () => {
-    const status = exampleStatus('moonriver', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'moonriver Update failed')
-  })
-
-  it('Updates the status in the DB form energyweb', async () => {
-    const status = exampleStatus('energyweb', {})
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Updates the status in the DB form goerli', async () => {
-    const status = exampleStatus('goerli', faucetStatus)
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Updates the status in the DB form mumbai', async () => {
-    const status = exampleStatus('mumbai', faucetStatus)
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Updates the status in the DB form moonbase', async () => {
-    const status = exampleStatus('moonbase', faucetStatus)
-    const response = await request(app)
-      .post('/update')
-      .send({ status })
-      .expect(200)
-
-    assert(response.text === 'Database updated', 'Update failed')
-  })
-
-  it('Gets the current status of Ocean services for all networks', async () => {
-    const response = await request(app)
-      .get(`/`)
-      .expect('Content-Type', /json/)
-      .expect(200)
-
-    const data: Status[] = response.body
-
-    assert(data.length === 8, `Invalid number of networks returned`)
-  })
-
-  const networkList = JSON.parse(
+  const networkList: INetwork[] = JSON.parse(
     process.env.NETWORKS
       ? process.env.NETWORKS
-      : '["mainnet","polygon","bsc","moonriver","energyweb","mumbai","moonbase","goerli"]'
+      : '[{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
   )
 
-  networkList.forEach((network) => {
+  networkList.forEach((element: INetwork) => {
+    const network = element.name
+    const test = element.test
+
+    it(`Updates the status in the DB for ${network}`, async () => {
+      const status = exampleStatus(network, test ? faucetStatus : {})
+      const response = await request(app)
+        .post('/update')
+        .send({ status })
+        .expect(200)
+
+      assert(
+        response.text === 'New status inserted in MongoDB',
+        'Update failed'
+      )
+    })
+
     it(`Gets the current status of Ocean services on ${network}`, async () => {
       const response = await request(app)
         .get(`/network/${network}`)
         .expect('Content-Type', /json/)
         .expect(200)
 
-      const data: Status = response.body
+      const data: IStatus = response.body[0]
 
-      assert(data, `Invalid body for ${network}`)
       assert(data.network === `${network}`, `Invalid network for ${network}`)
+      assert(
+        data.currentBlock === recentBlock,
+        `Invalid currentBlock for ${network}`
+      )
       assert(
         data.aquarius.status === `UP` || `WARNING`,
         `Invalid aquariusStatus for ${network}`
@@ -192,7 +121,7 @@ describe('API Request Tests', function () {
       )
 
       assert(
-        data.aquarius.block > recentBlock,
+        data.aquarius.block === recentBlock,
         `Invalid aquariusBlock for ${network}`
       )
       assert(
@@ -226,7 +155,7 @@ describe('API Request Tests', function () {
         `Invalid subgraphLatestRelease for ${network}`
       )
       assert(
-        data.subgraph.block > recentBlock,
+        data.subgraph.block === recentBlock,
         `Invalid subgraphBlock for ${network}`
       )
       assert(data.operator.status === `UP`, `Invalid operatorStatus ${network}`)
@@ -249,11 +178,48 @@ describe('API Request Tests', function () {
       )
       assert(data.market === `UP`, `Invalid market for ${network}`)
       assert(data.port === `UP`, `Invalid port for ${network}`)
-      assert(data.faucet, `Invalid faucet for ${network}`)
+      if (test) {
+        assert(
+          (data.faucet.status = State.Up),
+          `Invalid faucet status for ${network}`
+        )
+        assert(
+          data.faucet.response === 200,
+          `Invalid faucet response for ${network}`
+        )
+        assert(
+          data.faucet.ethBalance === faucetBalance,
+          `Invalid faucet ethBalance for ${network}`
+        )
+        assert(
+          data.faucet.ethBalanceSufficient === true,
+          `Invalid faucet ethBalanceSufficient for ${network}`
+        )
+        assert(
+          data.faucet.oceanBalance === faucetBalance,
+          `Invalid faucet oceanBalance for ${network}`
+        )
+        assert(
+          data.faucet.oceanBalanceSufficient === true,
+          `Invalid faucet oceanBalanceSufficient for ${network}`
+        )
+      }
+
       assert(
-        data.lastUpdatedOn > Date.now() - 500000000,
+        data.lastUpdatedOn === date,
         `Invalid lastUpdatedOn for ${network}`
       )
     })
+  })
+
+  it('Gets the current status of Ocean services for all networks', async () => {
+    const response = await request(app)
+      .get(`/`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+
+    const data: IStatus[] = response.body
+
+    assert(data.length === 8, `Invalid number of networks returned`)
   })
 })
