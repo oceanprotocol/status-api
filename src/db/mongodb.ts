@@ -53,7 +53,7 @@ export async function getAll(): Promise<IStatus[]> {
     for (let i = 0; i < networks.length; i++) {
       const network: string = networks[i].name
       const data = await getStatus(network)
-      status.push(data)
+      status.push(data[0])
       if (status.length === networks.length) {
         return status
       }

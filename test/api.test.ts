@@ -221,5 +221,18 @@ describe('API Request Tests', function () {
     const data: IStatus[] = response.body
 
     assert(data.length === 8, `Invalid number of networks returned`)
+    for (let i = 0; i < data.length; i++) {
+      assert(data[i].network, 'Missing field: network')
+      assert(data[i].currentBlock, 'Missing field: currentBlock')
+      assert(data[i].market, 'Missing field: market')
+      assert(data[i].port, 'Missing field: port')
+      assert(data[i].aquarius, 'Missing field: aquarius')
+      assert(data[i].provider, 'Missing field: provider')
+      assert(data[i].subgraph, 'Missing field: subgraph')
+      assert(data[i].operator, 'Missing field: operator')
+      assert(data[i].dataFarming, 'Missing field: dataFarming')
+      assert(data[i].daoGrants, 'Missing field: daoGrants')
+      assert(data[i].lastUpdatedOn, 'Missing field: lastUpdatedOn')
+    }
   })
 })
