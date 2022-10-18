@@ -15,7 +15,8 @@
     "test:format": "npm run format && npm run lint",
     "test": "ts-mocha -p test/tsconfig.json --exit test/**/*.test.ts",
     "type-check": "tsc --noEmit",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "release": "release-it --non-interactive"
   },
   "dependencies": {
     "bignumber.js": "^9.1.0",
