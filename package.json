@@ -1,7 +1,7 @@
 {
   "name": "ocean-status-service",
   "description": "Ocean Protocol Status Service",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Ocean Protocol <devops@oceanprotocol.com>",
   "license": "Apache-2.0",
   "main": "./dist/app.js",
@@ -16,7 +16,8 @@
     "test": "ts-mocha -p test/tsconfig.json --exit test/**/*.test.ts",
     "type-check": "tsc --noEmit",
     "prepare": "husky install",
-    "release": "release-it --non-interactive"
+    "release": "release-it --non-interactive",
+    "changelog": "auto-changelog -p"
   },
   "dependencies": {
     "auto-changelog": "^2.4.0",
