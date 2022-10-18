@@ -18,9 +18,7 @@ describe('API Request Tests', function () {
       network: network,
       currentBlock: recentBlock,
       market: State.Up,
-      port: State.Up,
       dataFarming: State.Up,
-      daoGrants: State.Up,
       faucet,
       provider: {
         response: 200,
@@ -177,7 +175,6 @@ describe('API Request Tests', function () {
         `Invalid operatorLimitReached for ${network}`
       )
       assert(data.market === `UP`, `Invalid market for ${network}`)
-      assert(data.port === `UP`, `Invalid port for ${network}`)
       if (test) {
         assert(
           (data.faucet.status = State.Up),
