@@ -6,7 +6,12 @@ export const statusSchema = new Schema<IStatus>({
   network: { type: String, required: true },
   currentBlock: { type: Number, required: true },
   market: { type: String, enum: State, required: true, default: State.Warning },
-  port: { type: String, enum: State, required: true, default: State.Warning },
+  dataFarming: {
+    type: String,
+    enum: State,
+    required: true,
+    default: State.Warning
+  },
   faucet: {
     status: {
       type: String,
@@ -68,18 +73,6 @@ export const statusSchema = new Schema<IStatus>({
     latestRelease: String,
     environments: Number,
     limitReached: Boolean
-  },
-  dataFarming: {
-    type: String,
-    enum: State,
-    required: true,
-    default: State.Warning
-  },
-  daoGrants: {
-    type: String,
-    enum: State,
-    required: true,
-    default: State.Warning
   },
   lastUpdatedOn: { type: Number, required: true, default: Date.now }
 })
