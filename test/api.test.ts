@@ -17,9 +17,10 @@ describe('API Request Tests', function () {
     const status: IStatus = {
       network: network,
       currentBlock: recentBlock,
-      market: { status: State.Up },
-      dataFarming: { status: State.Up },
+
       components: {
+        market: { status: State.Up },
+        dataFarming: { status: State.Up },
         faucet,
         provider: {
           response: 200,
@@ -192,7 +193,10 @@ describe('API Request Tests', function () {
         `Invalid operatorLimitReached for ${network}`
       )
 
-      assert(data.market.status === `UP`, `Invalid market for ${network}`)
+      assert(
+        data.components.market.status === `UP`,
+        `Invalid market for ${network}`
+      )
       if (test) {
         assert(
           (data.components.faucet.status = State.Up),
