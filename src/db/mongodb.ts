@@ -2,7 +2,7 @@ import { model, connect } from 'mongoose'
 import { statusSchema } from './schema'
 import { IStatus, INetwork } from '../@types'
 
-const collection = process.env.COLLECTION ? process.env.COLLECTION : 'Test'
+const collection = process.env.COLLECTION ? process.env.COLLECTION : 'Live'
 const Status = model<IStatus>(collection, statusSchema)
 
 // Connection URL
@@ -48,7 +48,7 @@ export async function getAll(): Promise<IStatus[]> {
     const networks: INetwork[] = JSON.parse(
       process.env.NETWORKS
         ? process.env.NETWORKS
-        : '[{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
+        : '[{"name":"general","test":false},{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
     )
     const status: IStatus[] = []
     for (let i = 0; i < networks.length; i++) {
