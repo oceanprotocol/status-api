@@ -1,26 +1,26 @@
-import { BigNumber } from 'bignumber.js'
-
 export enum State {
   Up = 'UP',
   Down = 'DOWN',
   Warning = 'WARNING'
 }
+
 export interface IStatus {
   network: string
   currentBlock: number
-  market: State
-  dataFarming: State
-  faucet: IFaucetStatus | Record<string, never>
-  aquarius: IAquariusStatus
-  provider: IProviderStatus
-  subgraph: ISubgraphStatus
-  operator: IOperatorStatus
-
+  market: { status?: State }
+  dataFarming: { status?: State }
+  components: {
+    faucet: IFaucetStatus | Record<string, never>
+    aquarius: IAquariusStatus
+    provider: IProviderStatus
+    subgraph: ISubgraphStatus
+    operator: IOperatorStatus
+  }
   lastUpdatedOn: number
 }
 export interface IProviderStatus {
   status?: State
-  statusMessages?: string
+  statusMessages?: string[]
   response?: number
   version?: string
   latestRelease?: string
@@ -28,7 +28,7 @@ export interface IProviderStatus {
 
 export interface IAquariusStatus {
   status?: State
-  statusMessages?: string
+  statusMessages?: string[]
   response?: number
   validChainList?: boolean
   version?: string
@@ -39,7 +39,7 @@ export interface IAquariusStatus {
 }
 export interface ISubgraphStatus {
   status?: State
-  statusMessages?: string
+  statusMessages?: string[]
   response?: number
   version?: string
   latestRelease?: string
@@ -48,7 +48,7 @@ export interface ISubgraphStatus {
 
 export interface IOperatorStatus {
   status?: State
-  statusMessages?: string
+  statusMessages?: string[]
   response?: number
   version?: string
   latestRelease?: string
@@ -57,11 +57,11 @@ export interface IOperatorStatus {
 }
 export interface IFaucetStatus {
   status?: State
-  statusMessages?: string
+  statusMessages?: string[]
   response?: number
-  ethBalance?: BigNumber | string
+  ethBalance?: string
   ethBalanceSufficient?: boolean
-  oceanBalance?: BigNumber | string
+  oceanBalance?: string
   oceanBalanceSufficient?: boolean
 }
 
