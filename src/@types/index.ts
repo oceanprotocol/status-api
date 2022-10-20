@@ -1,9 +1,8 @@
 export enum State {
-  Up = 'UP',
-  Down = 'DOWN',
-  Warning = 'WARNING'
+  Normal = 'Normal',
+  Degraded = 'Degraded',
+  Outage = 'Outage'
 }
-
 export interface IStatus {
   network: string
   currentBlock?: number
@@ -18,7 +17,7 @@ export interface IComponentStatus {
   statusMessages?: string[]
   version?: string
   latestRelease?: string
-
+  url?: string
   validChainList?: boolean
   block?: number
   validQuery?: boolean
