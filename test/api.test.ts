@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { assert } from 'chai'
 import app from '../src/app'
-import { IStatus, State, INetwork } from '../src/@types'
+import { IStatus } from '../src/@types'
 
 describe('API Request Tests', function () {
   this.timeout(300000)
