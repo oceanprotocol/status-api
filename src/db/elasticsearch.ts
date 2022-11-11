@@ -51,7 +51,6 @@ export async function getAll(): Promise<IStatus[]> {
         ? process.env.NETWORKS
         : '[{"name":"general","test":false},{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
     )
-    const client = await connection()
     const status: IStatus[] = []
     for (let i = 0; i < networks.length; i++) {
       const result = await getStatus(networks[i].name)
@@ -63,4 +62,9 @@ export async function getAll(): Promise<IStatus[]> {
     console.error(error)
     return error
   }
+}
+
+export async function forwardQuery(body: any): Promise<any> {
+  const client = await connection()
+  return await client.search(body)
 }
