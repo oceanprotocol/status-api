@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
+    "express-api-cache": "^1.0.4",
     "release-it": "^15.10.2"
   },
   "devDependencies": {
