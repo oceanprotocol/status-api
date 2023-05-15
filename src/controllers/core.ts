@@ -18,7 +18,7 @@ export async function getUniqueConsumersPerWeek(
 ) {
   const subgraphUrl = getSubgraphUrlFromChainId(chainId)
   let skip = 0
-  const nfts = {}
+  const nfts: { [week: string]: { [consumerId: string]: boolean } } = {} // Initialize nfts as an empty object
   const weeks = getWeeksOfYear(from, to)
   for (const week of weeks) nfts[week] = {}
   do {
