@@ -19,7 +19,10 @@ export async function getUniqueConsumersPerWeek(
   const subgraphUrl = getSubgraphUrlFromChainId(chainId)
   let skip = 0
   const nfts: { [week: string]: { [consumerId: string]: boolean } } = {} // Initialize nfts as an empty object
+  console.log('from', from)
+  console.log('to', to)
   const weeks = getWeeksOfYear(from, to)
+  console.log('weeks', weeks)
   for (const week of weeks) nfts[week] = {}
   do {
     const query = {
@@ -41,7 +44,17 @@ export async function getUniqueConsumersPerWeek(
     }
     for (const row of respJSON.data.orders) {
       const key = getYearAndWeek(row.createdTimestamp)
-      nfts[key][row.consumer.id] = true
+      console.log('key', key)
+      if (row.consumer.id) {
+        if (!nfts[key]) {
+          nfts[key] = {}
+        }
+        console.log('row.consumer.id', row.consumer.id)
+        console.log('nfts[key]', nfts[key])
+        console.log('nfts[key][row.consumer.id]', nfts[key][row.consumer.id])
+        nfts[key][row.consumer.id] = true
+        console.log('nfts[key][row.consumer.id]', nfts[key][row.consumer.id])
+      }
     }
     // eslint-disable-next-line no-constant-condition
   } while (true)
@@ -138,7 +151,12 @@ async function getUniquePublishMarketsPerMonth(
     }
     for (const row of respJSON.data.tokens) {
       const key = getYearAndMonth(row.createdTimestamp)
-      if (key) nfts[key][row.publishMarketFeeAddress] = true
+      if (key) {
+        if (!nfts[key]) {
+          nfts[key] = {}
+        }
+        nfts[key][row.publishMarketFeeAddress] = true
+      }
     }
     // eslint-disable-next-line no-constant-condition
   } while (true)
@@ -175,7 +193,12 @@ async function getUniquePublishMarketsPerYear(
     }
     for (const row of respJSON.data.tokens) {
       const key = getYear(row.createdTimestamp)
-      if (key) nfts[key][row.publishMarketFeeAddress] = true
+      if (key) {
+        if (!nfts[key]) {
+          nfts[key] = {}
+        }
+        nfts[key][row.publishMarketFeeAddress] = true
+      }
     }
     // eslint-disable-next-line no-constant-condition
   } while (true)
@@ -327,7 +350,10 @@ export async function getUniqueConsumeMarketsPerWeek(
     for (const row of respJSON.data.orders) {
       const key = getYearAndWeek(row.createdTimestamp)
       if (row.consumerMarket && row.consumerMarket.id)
-        nfts[key][row.consumerMarket.id] = true
+        if (!nfts[key]) {
+          nfts[key] = {}
+        }
+      nfts[key][row.consumerMarket.id] = true
     }
     // eslint-disable-next-line no-constant-condition
   } while (true)
