@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import express from 'express'
-import { IStatus } from './@types'
-import { forwardQuery, getAll, getStatus } from './db/elasticsearch'
+import { IStatus } from '../@types'
+import { forwardQuery, getAll, getStatus } from '../db/elasticsearch'
 
 const router = express.Router()
 
