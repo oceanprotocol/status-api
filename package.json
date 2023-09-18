@@ -28,14 +28,14 @@
     "release-it": "^15.11.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.5",
+    "@types/chai": "^4.3.6",
     "@types/cors": "^2.8.13",
     "@types/expect": "^24.3.0",
     "@types/express": "^4.17.17",
     "@types/mocha": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.62.0",
-    "chai": "^4.3.7",
+    "chai": "^4.3.8",
     "eslint": "^8.46.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^4.0.0",
