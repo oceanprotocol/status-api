@@ -49,7 +49,7 @@ export async function getAll(): Promise<IStatus[]> {
     const networks: INetwork[] = JSON.parse(
       process.env.NETWORKS
         ? process.env.NETWORKS
-        : '[{"name":"general","test":false},{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"bsc","test":false},{"name":"moonriver","test":false},{"name":"energyweb","test":false},{"name":"mumbai","test":true},{"name":"moonbase","test":true},{"name":"goerli","test":true}]'
+        : '[{"name":"general","test":false},{"name":"mainnet","test":false},{"name":"polygon","test":false},{"name":"optimism","test":false},{"name":"mumbai","test":true},{"name":"sepolia","test":true}]'
     )
     const status: IStatus[] = []
     for (let i = 0; i < networks.length; i++) {

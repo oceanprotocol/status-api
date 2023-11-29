@@ -238,6 +238,6 @@ describe('API Request Tests', function () {
 
     const data: IStatus[] = response.body
 
-    assert(data.length === 9, `Invalid number of networks returned`)
+    assert(data.length === 6, `Invalid number of networks returned`)
   })
 })
